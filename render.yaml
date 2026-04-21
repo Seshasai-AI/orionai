@@ -2,23 +2,18 @@ services:
   - type: web
     name: orionai
     runtime: python
-    region: oregon          # free tier region
+    region: oregon
     plan: free
-
-    # ── Build ───────────────────────────────────────────────
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-
-    # ── Start ───────────────────────────────────────────────
-    # gunicorn with uvicorn workers = production-grade ASGI
-    # $PORT is automatically injected by Render
+ 
+    # Force Python 3.11 — avoids pydantic-core Rust compile error on 3.14
+    pythonVersion: "3.11.0"
+ 
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install --only-binary=:all: pydantic pydantic-core && pip install -r requirements.txt
+ 
     startCommand: gunicorn backend.main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --log-level info
-
-    # ── Health check ────────────────────────────────────────
+ 
     healthCheckPath: /health
-
-    # ── Environment variables ───────────────────────────────
-    # Set GROQ_API_KEY and TAVILY_API_KEY manually in Render dashboard
-    # Do NOT hardcode real keys here — this file goes to GitHub
+ 
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.0"
@@ -27,6 +22,6 @@ services:
       - key: MAX_TOKENS
         value: "1024"
       - key: GROQ_API_KEY
-        sync: false        # means: set manually in dashboard
+        sync: false
       - key: TAVILY_API_KEY
-        sync: false        # means: set manually in dashboard
+        sync: false
