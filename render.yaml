@@ -4,19 +4,14 @@ services:
     runtime: python
     region: oregon
     plan: free
- 
-    # Force Python 3.11 — avoids pydantic-core Rust compile error on 3.14
-    pythonVersion: "3.11.0"
- 
-    buildCommand: pip install --upgrade pip setuptools wheel && pip install --only-binary=:all: pydantic pydantic-core && pip install -r requirements.txt
- 
+
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+
     startCommand: gunicorn backend.main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 --log-level info
- 
+
     healthCheckPath: /health
- 
+
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.11.0"
       - key: AI_MODEL
         value: llama-3.3-70b-versatile
       - key: MAX_TOKENS
