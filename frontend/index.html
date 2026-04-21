@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OrionAI — Intelligent Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon"><!-- Orion star mark -->
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="5"  r="2.5" fill="currentColor"/>
+              <circle cx="29" cy="12" r="2"   fill="currentColor" opacity=".7"/>
+              <circle cx="7"  cy="12" r="2"   fill="currentColor" opacity=".7"/>
+              <circle cx="18" cy="18" r="3.5" fill="currentColor"/>
+              <circle cx="27" cy="25" r="2"   fill="currentColor" opacity=".6"/>
+              <circle cx="9"  cy="25" r="2"   fill="currentColor" opacity=".6"/>
+              <circle cx="18" cy="31" r="2"   fill="currentColor" opacity=".4"/>
+              <line x1="18" y1="5"  x2="29" y2="12" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="29" y1="12" x2="18" y2="18" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="18" y1="18" x2="7"  y2="12" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="7"  y1="12" x2="18" y2="5"  stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="18" y1="18" x2="27" y2="25" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="27" y1="25" x2="18" y2="31" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="18" y1="31" x2="9"  y2="25" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+              <line x1="9"  y1="25" x2="18" y2="18" stroke="currentColor" stroke-width=".7" opacity=".25"/>
+            </svg>
+          </div>
+          <span class="logo-text">OrionAI</span>
+        </div>
+        <button class="icon-btn sidebar-close" id="sidebar-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <button class="new-chat-btn" id="new-chat-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        New Conversation
+      </button>
+
+      <div class="chat-history" id="chat-history">
+        <p class="history-label">Recent</p>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-row">
+          <span class="dot dot-green"></span>
+          <span id="model-display">Loading…</span>
+        </div>
+        <div class="status-row" id="web-row" style="display:none">
+          <span class="dot dot-blue"></span>
+          <span>Web search ON</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <div class="topbar-brand">
+          <div class="topbar-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="5"  r="2.5" fill="currentColor"/>
+              <circle cx="29" cy="12" r="2"   fill="currentColor" opacity=".7"/>
+              <circle cx="7"  cy="12" r="2"   fill="currentColor" opacity=".7"/>
+              <circle cx="18" cy="18" r="3.5" fill="currentColor"/>
+              <circle cx="27" cy="25" r="2"   fill="currentColor" opacity=".6"/>
+              <circle cx="9"  cy="25" r="2"   fill="currentColor" opacity=".6"/>
+            </svg>
+          </div>
+          <span class="topbar-title">OrionAI</span>
+        </div>
+        <button class="icon-btn clear-btn" id="clear-btn" title="Clear chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+            <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="feed" id="feed">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">
+            <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="36" cy="9"  r="5"   fill="currentColor"/>
+              <circle cx="57" cy="22" r="3.5" fill="currentColor" opacity=".7"/>
+              <circle cx="15" cy="22" r="3.5" fill="currentColor" opacity=".7"/>
+              <circle cx="36" cy="36" r="7"   fill="currentColor"/>
+              <circle cx="55" cy="51" r="3.5" fill="currentColor" opacity=".6"/>
+              <circle cx="17" cy="51" r="3.5" fill="currentColor" opacity=".6"/>
+              <circle cx="36" cy="63" r="4"   fill="currentColor" opacity=".4"/>
+            </svg>
+          </div>
+          <h1 class="welcome-title">Hello, I'm OrionAI.</h1>
+          <p class="welcome-sub">Powered by Llama 3.3 · Real-time web search</p>
+          <div class="chips">
+            <button class="chip" data-p="What's the latest news in AI today?">🌐 Latest AI news</button>
+            <button class="chip" data-p="Who won yesterday's IPL 2026 match?">🏏 Yesterday's IPL result</button>
+            <button class="chip" data-p="Write a Python function to reverse a string">🐍 Python code help</button>
+            <button class="chip" data-p="Give me 5 portfolio project ideas for AI/ML">💡 AI portfolio ideas</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <div class="input-box" id="input-box">
+          <textarea id="input" placeholder="Ask OrionAI anything…" rows="1" spellcheck="true" aria-label="Message"></textarea>
+          <button class="send-btn" id="send-btn" disabled aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        <p class="disclaimer">OrionAI can make mistakes. Verify important information.</p>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
